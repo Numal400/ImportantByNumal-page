@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Just a Question 😊</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .container {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    button {
+        padding: 12px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 10px;
+        margin: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .option {
+        background: #ff5f7e;
+        color: white;
+    }
+
+    .option:hover {
+        background: #ff3b66;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .no-btn {
+        position: absolute;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container" id="box">
+    <h2 id="question">What's your gender?</h2>
+    <button class="option" onclick="chooseGender('male')">Male</button>
+    <button class="option" onclick="chooseGender('female')">Female</button>
+</div>
+
+<script>
+let straightScale = 1;
+let noScale = 1;
+
+function chooseGender(gender) {
+    if (gender === 'male') {
+        setQuestion("Are you gay or straight?");
+        setButtons([
+            {text: "Gay", action: gayPath},
+            {text: "Straight", action: shrinkStraight}
+        ]);
+    } else {
+        setQuestion("Are you a lesbian or straight?");
+        setButtons([
+            {text: "Lesbian", action: lesbianPath},
+            {text: "Straight", action: shrinkStraight}
+        ]);
+    }
+}
+
+function gayPath() {
+    setQuestion("Will you be a femboy? 💖");
+    setButtons([
+        {text: "Yes", action: congratulations},
+        {text: "No", action: movingNo, noBtn: true}
+    ]);
+}
+
+function lesbianPath() {
+    setQuestion("Will you join lesbian defence academy? 💕");
+    setButtons([
+        {text: "Yes", action: congratulations},
+        {text: "No", action: movingNo, noBtn: true}
+    ]);
+}
+
+function shrinkStraight(btn) {
+    straightScale -= 0.1;
+    if (straightScale < 0.2) straightScale = 0.2;
+    btn.style.transform = `scale(${straightScale})`;
+}
+
+function movingNo(btn) {
+    noScale -= 0.1;
+    if (noScale < 0.2) noScale = 0.2;
+
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 50);
+
+    btn.style.left = x + "px";
+    btn.style.top = y + "px";
+    btn.style.transform = `scale(${noScale})`;
+}
+
+function congratulations() {
+    document.body.innerHTML = `
+        <div style="
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+            background:linear-gradient(135deg,#a1ffce,#faffd1);
+            text-align:center;
+            font-family:Arial;
+        ">
+            <h1>🎉 Congratulations! 💖<br>You made the right choice </h1>
+        </div>
+    `;
+}
+
+function setQuestion(text) {
+    document.getElementById("question").innerText = text;
+}
+
+function setButtons(buttons) {
+    const box = document.getElementById("box");
+    box.innerHTML = `<h2 id="question">${document.getElementById("question").innerText}</h2>`;
+
+    buttons.forEach(b => {
+        const btn = document.createElement("button");
+        btn.innerText = b.text;
+        btn.className = "option";
+        if (b.noBtn) btn.classList.add("no-btn");
+
+        btn.onclick = function() {
+            b.action(btn);
+        };
+
+        box.appendChild(btn);
+    });
+}
+</script>
+
+</body>
+</html>
